@@ -1,6 +1,5 @@
-
-
-class HotelRoomType():
+from enum import Enum
+class HotelRoomType(Enum):
     """Python class to implement an enumeration for the attribute Hotel Room Type.
 
     This Python class implements an enumeration for the attribute Hotel Room Type.
@@ -22,13 +21,9 @@ class HotelRoomType():
     ----------
     """
     #Here you start your code.
-
-
-
-
-
-
-
+    INDIVIDUAL = 1
+    DOBLE = 2
+    SUITE = 3
 
 
 def main():
