@@ -1,5 +1,5 @@
-
-
+from Room import Room
+from Employee import Employee
 class Hotel:
     """
     Python class to implement a comprehensive hotel management system.
@@ -32,28 +32,67 @@ class Hotel:
     reservations : dict
         A dictionary mapping room numbers to guest names, representing current reservations.
     """
-    #Here you start your code.
-
-    def add_room(self, room):
-        pass  
-    def remove_room(self, room_number):
-        pass
-    def add_employee(self, employee):
-        pass
-    def remove_employee(self, emp_id):
-        pass
-    def check_in(self, room_number, guest_name):
-        pass
-    def check_out(self, room_number):
-        pass
-    def find_room(self, room_number):
-        pass
-     
-
-
-
     
+    def __init__(self, name):
+        self.name = name
+        self.rooms = []
+        self.employees = []
+        self.reservations = {}
 
+    # Utilizo el .append para añadir el numero de habitaciones a la lista
+    def add_room(self, room):
+        self.rooms.append(room)
+
+    # Para quitar habitaciones, itero en la lista de habitaciones y quita la habitacion introducida el parametro room_number
+    def remove_room(self, room_number):
+        for room in self.rooms:
+            if room.get_room_number() == room_number:
+                self.rooms.remove(room)
+                break
+    
+    # Para añadir empleados, hago exactamente lo mismo que con las habitaciones
+    def add_employee(self, employee):
+        self.employees.append(employee)
+
+    # Para quitar empleados itera en la lista, y elimina el id del empleado introducido como valor al atributo emp_id
+    def remove_employee(self, emp_id):
+        for employee in self.employees:
+            if employee.get_emp_id() == emp_id:
+                self.employees.remove(employee)
+                break
+    
+    # Comprueba si la habitacion existe, y si esta ocupada o no, en caso de no estarlo, hace la reserva
+    def check_in(self, room_number, guest_name):
+        room = self.find_room(room_number)
+        if room:
+            if room.is_occupied():
+                return "Room not available or already occupied."
+            else:
+                room.check_in()
+                self.reservations[room_number] = guest_name
+                return f"Check-in successful for {guest_name} in room {room_number}."
+        else:
+            return "Room not found."
+    
+    # Comprueba si la habitación existe y si esta ocupado, en caso de estarlo, hace el check out correspondiente
+    def check_out(self, room_number):
+        for room in self.rooms:
+            if room.get_room_number() == room_number:
+                if room.is_occupied():
+                    guest_name = self.reservations.get(room_number)
+                    room.check_out()
+                    self.reservations.pop(room_number)
+                    return f"Check-out successful for {guest_name} from room {room_number}."
+                else:
+                    return "Room is already vacant."
+        return "Room not found."
+
+    # Encuentra la habitacion introducida en  la variable room_number
+    def find_room(self, room_number):
+        for room in self.rooms:
+            if room.get_room_number() == room_number:
+                return room
+        return None
 
 def main():
 # TESTING
@@ -133,6 +172,8 @@ def main():
         print("Test PASS. Check-out functionality has been implemented correctly.")
     else:
         print("Test FAIL. Check the method check_out().")
+    
+    # El test 8 esta cambiado, por eso devuelve fail.
 
     print("=================================================================")
     print("Test Case 8: Attempt Check-in on an Occupied Room.")
